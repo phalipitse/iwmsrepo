@@ -7,7 +7,7 @@ spec:
   - name: frontend
     github:
       branch: main
-      repo: your-username/zaniq-iwms-v2
+      repo: phalipitse/iwmsrepo
       deploy_on_push: true
 
     build_command: npm run build:frontend
@@ -38,7 +38,7 @@ spec:
   - name: backend
     github:
       branch: main
-      repo: your-username/zaniq-iwms-v2
+      repo: phalipitse/iwmsrepo
       deploy_on_push: true
 
     build_command: npm run build:backend
