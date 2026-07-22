@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ZaniQ IWMS - Integrated Workplace Management System for South African Higher Education Institutions">
+  <meta name="keywords" content="IWMS, facility management, university management, POPIA, HEMIS, South Africa">
+  <meta name="author" content="ZaniQ">
+
+  <!-- SEO -->
+  <meta property="og:title" content="ZaniQ IWMS - Workplace Management for Universities">
+  <meta property="og:description" content="Integrated facility management for SA higher education">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zaniq-iwms.netlify.app">
+
+  <title>ZaniQ IWMS — Integrated Workplace Management System</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏫</text></svg>">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#10242E">
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <!-- Analytics (Google Analytics - Optional) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script> -->
+
+  <style>
+    /* Critical CSS - Inline for faster load */
+    :root{
+      --ink:#10242E;--paper:#F4F1E9;--card:#FCFAF5;--line:#DCD4C3;
+      --acc:#C4472A;--acc2:#1E7263;--gold:#C08F2E;--dim:#5E6C71;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--paper);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+    /* Loading spinner */
+    .loading{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999}
+    .loading.active{display:block}
+    .spinner{width:50px;height:50px;border:4px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <!-- Loading Indicator -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Demo Banner -->
+  <div class="demo-flag">
+    ZaniQ IWMS — <b>INTERACTIVE DEMO</b> · A fictional institution with illustrative data. Click through the modules on the left. · <a href="#contact">Book a demo</a>
+  </div>
+
+  <div class="wrap">
+    <!-- Sidebar Navigation -->
+    <aside>
+      <div class="logo">Zani<span>Q</span></div>
+      <div class="tag">IWMS</div>
+
+      <div class="client">
+        <b id="client-name">Example University</b>
+        <span id="client-desc">Demonstration tenant<br>Three campuses · sample estate</span>
+      </div>
+
+      <nav id="nav" role="navigation" aria-label="Main navigation">
+        <a class="on" data-v="dash" role="button" tabindex="0" aria-label="Estate Dashboard">
+          <span class="i" aria-hidden="true">◧</span> Estate Dashboard
+        </a>
+        <a data-v="maint" role="button" tabindex="0" aria-label="Maintenance">
+          <span class="i" aria-hidden="true">⚙</span> Maintenance
+        </a>
+        <a data-v="res" role="button" tabindex="0" aria-label="Residences">
+          <span class="i" aria-hidden="true">⌂</span> Residences
+        </a>
+        <a data-v="energy" role="button" tabindex="0" aria-label="Energy & Water">
+          <span class="i" aria-hidden="true">◈</span> Energy & Water
+        </a>
+        <a data-v="space" role="button" tabindex="0" aria-label="Space & Bookings">
+          <span class="i" aria-hidden="true">▦</span> Space & Bookings
+        </a>
+        <a data-v="safety" role="button" tabindex="0" aria-label="Safety & Compliance">
+          <span class="i" aria-hidden="true">⛨</span> Safety & Compliance
+        </a>
+        <a data-v="vendors" role="button" tabindex="0" aria-label="Vendors & B-BBEE">
+          <span class="i" aria-hidden="true">◇</span> Vendors & B-BBEE
+        </a>
+      </nav>
+
+      <div class="foot">
+        Data resident in South Africa<br>
+        POPIA · OHS Act 85/1993<br>
+        DHET / HEMIS aligned
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main role="main">
+      <!-- Page Header -->
+      <div class="top">
+        <div>
+          <h1 id="ttl">Estate Dashboard</h1>
+          <div class="sub" id="sub">Live overview · three campuses</div>
+        </div>
+        <div class="stage">
+          <span class="dot" aria-hidden="true"></span>
+          <span id="load-shedding">Load-shedding Stage 2 · next 18:00–20:30</span>
+        </div>
+      </div>
+
+      <!-- Dynamic Content Container -->
+      <div id="app-content">
+        <!-- Content loaded from app.js -->
+      </div>
+
+      <!-- CTA Section -->
+      <div class="cta" id="contact">
+        <h3>See it with your own estate</h3>
+        <p>This demo uses a fictional institution. We run walkthroughs against your actual campus structure,<br>systems and reporting obligations — no commitment required.</p>
+        <a class="btn" href="mailto:pitsephali@gmail.com?subject=ZaniQ%20IWMS%20demo">Book a demo</a>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        ZaniQ IWMS · Interactive demonstration · Fictional institution, illustrative data<br>
+        Data resident in South Africa · POPIA · OHS Act 85 of 1993 · DHET/HEMIS aligned
+        <br><br>
+        <small>Version 2.0 | <a href="https://github.com/your-org/zaniq-iwms-v2" style="color:var(--acc)">GitHub</a></small>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Service Worker for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registered:', reg))
+          .catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  </script>
+
+  <!-- Analytics -->
+  <script>
+    // Simple page view tracking
+    if (window.location.hostname !== 'localhost') {
+      console.log('Page view:', window.location.pathname);
+    }
+  </script>
+</body>
+</html>

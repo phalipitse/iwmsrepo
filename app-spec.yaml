@@ -1,0 +1,112 @@
+spec:
+  name: zaniq-iwms
+  region: nyc
+
+  # Static frontend (from your current Netlify site)
+  static_sites:
+  - name: frontend
+    github:
+      branch: main
+      repo: your-username/zaniq-iwms-v2
+      deploy_on_push: true
+
+    build_command: npm run build:frontend
+    output_dir: /frontend/dist
+
+    envs:
+    - key: VITE_API_URL
+      value: ${backend.PUBLIC_URL}
+    - key: NODE_ENV
+      value: production
+
+    routes:
+    - path: /
+
+    catchall_document: index.html
+    error_document: /404.html
+
+    cors:
+      allow_origins:
+      - regex: ".*"
+      allow_methods:
+      - GET
+      - POST
+      - OPTIONS
+
+  # Backend API
+  services:
+  - name: backend
+    github:
+      branch: main
+      repo: your-username/zaniq-iwms-v2
+      deploy_on_push: true
+
+    build_command: npm run build:backend
+    run_command: npm start --workspace=backend
+
+    envs:
+    - key: NODE_ENV
+      value: production
+    - key: PORT
+      value: "8080"
+    - key: DATABASE_URL
+      scope: RUN_AND_BUILD_TIME
+      type: SECRET
+      value: ${db.DATABASE_URL}
+    - key: REDIS_URL
+      scope: RUN_TIME
+      type: SECRET
+      value: ${redis.REDIS_URL}
+    - key: JWT_SECRET
+      scope: RUN_TIME
+      type: SECRET
+      value: your-jwt-secret-change-this
+    - key: CORS_ORIGIN
+      value: ${frontend.PUBLIC_URL}
+
+    http_port: 8080
+
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 10
+      period_seconds: 10
+      timeout_seconds: 3
+
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+    routes:
+    - path: /api
+
+  # PostgreSQL database
+  databases:
+  - name: db
+    engine: PG
+    version: "15"
+    production: false  # Set to true for production
+    cluster_name: zaniq-iwms-db
+    db_name: zaniq_production
+    db_user: zaniq_user
+    num_nodes: 1
+    size: db-s-1vcpu-1gb
+
+  # Redis cache
+  - name: redis
+    engine: REDIS
+    version: "7"
+    production: false  # Set to true for production
+    cluster_name: zaniq-iwms-redis
+    num_nodes: 1
+    size: db-s-1vcpu-1gb
+
+  # Global environment
+  envs:
+  - key: APP_NAME
+    value: zaniq-iwms
+  - key: TZ
+    value: Africa/Johannesburg
+
+  # Alerts
+  alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DEPLOYMENT_LIVE
