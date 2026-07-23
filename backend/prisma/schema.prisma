@@ -1,4 +1,5 @@
-// Simplified ZaniQ IWMS Schema for SQLite (Local Testing)
+// ZaniQ IWMS Database Schema
+// PostgreSQL with Prisma ORM
 
 generator client {
   provider = "prisma-client-js"
@@ -9,47 +10,83 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Users & Authentication
+// ============================================
+// USERS & AUTHENTICATION
+// ============================================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  TECHNICIAN
+  STUDENT
+  STAFF
+  VENDOR
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING
+}
+
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
+  id            String      @id @default(uuid())
+  email         String      @unique
   passwordHash  String
   firstName     String
   lastName      String
   phone         String?
-  role          String    @default("STAFF")
-  status        String    @default("ACTIVE")
+  role          UserRole    @default(STAFF)
+  status        UserStatus  @default(PENDING)
   lastLogin     DateTime?
-  emailVerified Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  emailVerified Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
+  // Relationships
   workOrders      WorkOrder[]      @relation("AssignedTo")
   createdOrders   WorkOrder[]      @relation("CreatedBy")
+  residenceApps   ResidenceApplication[]
+  inspections     Inspection[]
   auditLogs       AuditLog[]
 
   @@map("users")
 }
 
-// Campuses
-model Campus {
-  id          String    @id @default(uuid())
-  name        String
-  code        String    @unique
-  type        String
-  address     String
-  city        String    @default("Johannesburg")
-  province    String    @default("Gauteng")
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+// ============================================
+// ESTATES & LOCATIONS
+// ============================================
 
+enum CampusType {
+  MAIN
+  SATELLITE
+  OFF_CAMPUS
+}
+
+model Campus {
+  id          String      @id @default(uuid())
+  name        String
+  code        String      @unique
+  type        CampusType
+  address     String
+  city        String      @default("Johannesburg")
+  province    String      @default("Gauteng")
+  postalCode  String?
+  latitude    Float?
+  longitude   Float?
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relationships
   buildings   Building[]
+  generators  Generator[]
 
   @@map("campuses")
 }
 
-// Buildings
 model Building {
   id          String   @id @default(uuid())
   campusId    String
@@ -61,53 +98,143 @@ model Building {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Relationships
   campus      Campus   @relation(fields: [campusId], references: [id], onDelete: Cascade)
+  floors_rel  Floor[]
   assets      Asset[]
 
   @@map("buildings")
 }
 
-// Assets
+model Floor {
+  id          String   @id @default(uuid())
+  buildingId  String
+  number      Int
+  name        String
+  area        Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  building    Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  rooms       Room[]
+
+  @@unique([buildingId, number])
+  @@map("floors")
+}
+
+model Room {
+  id          String   @id @default(uuid())
+  floorId     String
+  number      String
+  name        String?
+  type        String
+  capacity    Int?
+  area        Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  floor       Floor    @relation(fields: [floorId], references: [id], onDelete: Cascade)
+  assets      Asset[]
+  bookings    Booking[]
+
+  @@map("rooms")
+}
+
+// ============================================
+// ASSETS & MAINTENANCE
+// ============================================
+
+enum AssetStatus {
+  OPERATIONAL
+  MAINTENANCE
+  BROKEN
+  RETIRED
+}
+
+enum AssetCriticality {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
 model Asset {
-  id            String    @id @default(uuid())
+  id            String            @id @default(uuid())
   buildingId    String?
-  code          String    @unique
+  roomId        String?
+  code          String            @unique
   name          String
   category      String
   description   String?
-  qrCode        String    @unique
-  status        String    @default("OPERATIONAL")
-  criticality   String    @default("MEDIUM")
+  qrCode        String            @unique
+  manufacturer  String?
+  model         String?
+  serialNumber  String?
+  purchaseDate  DateTime?
+  purchasePrice Float?
+  status        AssetStatus       @default(OPERATIONAL)
+  criticality   AssetCriticality  @default(MEDIUM)
+  warrantyExp   DateTime?
   lastService   DateTime?
   nextService   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
+  // Relationships
   building      Building?  @relation(fields: [buildingId], references: [id])
+  room          Room?      @relation(fields: [roomId], references: [id])
   workOrders    WorkOrder[]
 
   @@map("assets")
 }
 
-// Work Orders
+enum WorkOrderStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CLOSED
+  CANCELLED
+}
+
+enum WorkOrderPriority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  PLANNED
+}
+
 model WorkOrder {
-  id            String    @id @default(uuid())
+  id            String            @id @default(uuid())
   assetId       String?
   assignedToId  String?
   createdById   String
   title         String
   description   String
-  priority      String
-  status        String    @default("OPEN")
+  priority      WorkOrderPriority
+  status        WorkOrderStatus   @default(OPEN)
   reportedBy    String
-  reportedAt    DateTime  @default(now())
+  reportedAt    DateTime          @default(now())
+  assignedAt    DateTime?
+  startedAt     DateTime?
   completedAt   DateTime?
+  closedAt      DateTime?
   slaDeadline   DateTime
+  slaMet        Boolean?
   estimatedCost Float?
   actualCost    Float?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  laborHours    Float?
+  notes         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
 
+  // Relationships
   asset         Asset?    @relation(fields: [assetId], references: [id])
   assignedTo    User?     @relation("AssignedTo", fields: [assignedToId], references: [id])
   createdBy     User      @relation("CreatedBy", fields: [createdById], references: [id])
@@ -115,17 +242,252 @@ model WorkOrder {
   @@map("work_orders")
 }
 
-// Audit Log
+// ============================================
+// RESIDENCES
+// ============================================
+
+enum ResidenceType {
+  ON_CAMPUS
+  OFF_CAMPUS_ACCREDITED
+}
+
+enum ResidenceStatus {
+  ACTIVE
+  INACTIVE
+  UNDER_RENOVATION
+}
+
+model Residence {
+  id              String            @id @default(uuid())
+  campusId        String?
+  name            String
+  code            String            @unique
+  type            ResidenceType
+  status          ResidenceStatus   @default(ACTIVE)
+  totalBeds       Int
+  address         String?
+  accreditationExp DateTime?
+  isNsfasEligible Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  // Relationships
+  applications    ResidenceApplication[]
+
+  @@map("residences")
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  WAITLISTED
+  ALLOCATED
+  CHECKED_IN
+  CHECKED_OUT
+}
+
+model ResidenceApplication {
+  id              String            @id @default(uuid())
+  residenceId     String
+  studentId       String
+  academicYear    Int
+  semester        String
+  status          ApplicationStatus @default(PENDING)
+  roomNumber      String?
+  nsfasEligible   Boolean           @default(false)
+  nsfasAmount     Float?
+  appliedAt       DateTime          @default(now())
+  approvedAt      DateTime?
+  checkedInAt     DateTime?
+  checkedOutAt    DateTime?
+  damagesAmount   Float?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  // Relationships
+  residence       Residence   @relation(fields: [residenceId], references: [id])
+  student         User        @relation(fields: [studentId], references: [id])
+
+  @@map("residence_applications")
+}
+
+// ============================================
+// ENERGY & UTILITIES
+// ============================================
+
+enum GeneratorStatus {
+  READY
+  REFUEL_NEEDED
+  MAINTENANCE
+  OFFLINE
+}
+
+model Generator {
+  id          String          @id @default(uuid())
+  campusId    String
+  code        String          @unique
+  name        String
+  location    String
+  capacity    Float
+  fuelLevel   Float
+  runtime     Float
+  status      GeneratorStatus @default(READY)
+  lastRun     DateTime?
+  nextService DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relationships
+  campus      Campus  @relation(fields: [campusId], references: [id])
+
+  @@map("generators")
+}
+
+model LoadShedding {
+  id          String   @id @default(uuid())
+  stage       Int
+  startTime   DateTime
+  endTime     DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("load_shedding_schedule")
+}
+
+// ============================================
+// COMPLIANCE & SAFETY
+// ============================================
+
+enum InspectionType {
+  FIRE_SAFETY
+  OHS
+  ELEVATOR
+  ELECTRICAL
+  PLUMBING
+  EMERGENCY_DRILL
+  POPIA_AUDIT
+}
+
+enum InspectionStatus {
+  SCHEDULED
+  COMPLETED
+  FAILED
+  OVERDUE
+}
+
+model Inspection {
+  id            String            @id @default(uuid())
+  type          InspectionType
+  inspectorId   String
+  location      String
+  scheduledDate DateTime
+  completedDate DateTime?
+  status        InspectionStatus  @default(SCHEDULED)
+  findings      String?
+  passed        Boolean?
+  notes         String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  // Relationships
+  inspector     User  @relation(fields: [inspectorId], references: [id])
+
+  @@map("inspections")
+}
+
+// ============================================
+// VENDORS & PROCUREMENT
+// ============================================
+
+enum VendorStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model Vendor {
+  id              String        @id @default(uuid())
+  name            String
+  code            String        @unique
+  trade           String
+  email           String
+  phone           String
+  bbeLevel        String
+  csdVerified     Boolean       @default(false)
+  csdExpiry       DateTime?
+  taxClearance    Boolean       @default(false)
+  taxClearanceExp DateTime?
+  status          VendorStatus  @default(ACTIVE)
+  slaMet          Float?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("vendors")
+}
+
+// ============================================
+// BOOKINGS & SPACE UTILIZATION
+// ============================================
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  roomId      String
+  userId      String
+  title       String
+  startTime   DateTime
+  endTime     DateTime
+  purpose     String?
+  attendees   Int?
+  status      BookingStatus @default(PENDING)
+  approvedBy  String?
+  approvedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relationships
+  room        Room  @relation(fields: [roomId], references: [id])
+
+  @@map("bookings")
+}
+
+// ============================================
+// AUDIT & LOGGING
+// ============================================
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  ACCESS
+}
+
 model AuditLog {
-  id          String    @id @default(uuid())
+  id          String      @id @default(uuid())
   userId      String?
-  action      String
+  action      AuditAction
   entity      String
   entityId    String?
+  changes     Json?
   ipAddress   String?
-  createdAt   DateTime  @default(now())
+  userAgent   String?
+  createdAt   DateTime    @default(now())
 
-  user        User?     @relation(fields: [userId], references: [id])
+  // Relationships
+  user        User?  @relation(fields: [userId], references: [id])
 
   @@map("audit_logs")
 }
+
+// Indexes are defined within each model above

@@ -1,0 +1,131 @@
+// Simplified ZaniQ IWMS Schema for SQLite (Local Testing)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Users & Authentication
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  phone         String?
+  role          String    @default("STAFF")
+  status        String    @default("ACTIVE")
+  lastLogin     DateTime?
+  emailVerified Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  workOrders      WorkOrder[]      @relation("AssignedTo")
+  createdOrders   WorkOrder[]      @relation("CreatedBy")
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+// Campuses
+model Campus {
+  id          String    @id @default(uuid())
+  name        String
+  code        String    @unique
+  type        String
+  address     String
+  city        String    @default("Johannesburg")
+  province    String    @default("Gauteng")
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  buildings   Building[]
+
+  @@map("campuses")
+}
+
+// Buildings
+model Building {
+  id          String   @id @default(uuid())
+  campusId    String
+  name        String
+  code        String   @unique
+  floors      Int      @default(1)
+  totalArea   Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campus      Campus   @relation(fields: [campusId], references: [id], onDelete: Cascade)
+  assets      Asset[]
+
+  @@map("buildings")
+}
+
+// Assets
+model Asset {
+  id            String    @id @default(uuid())
+  buildingId    String?
+  code          String    @unique
+  name          String
+  category      String
+  description   String?
+  qrCode        String    @unique
+  status        String    @default("OPERATIONAL")
+  criticality   String    @default("MEDIUM")
+  lastService   DateTime?
+  nextService   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  building      Building?  @relation(fields: [buildingId], references: [id])
+  workOrders    WorkOrder[]
+
+  @@map("assets")
+}
+
+// Work Orders
+model WorkOrder {
+  id            String    @id @default(uuid())
+  assetId       String?
+  assignedToId  String?
+  createdById   String
+  title         String
+  description   String
+  priority      String
+  status        String    @default("OPEN")
+  reportedBy    String
+  reportedAt    DateTime  @default(now())
+  completedAt   DateTime?
+  slaDeadline   DateTime
+  estimatedCost Float?
+  actualCost    Float?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  asset         Asset?    @relation(fields: [assetId], references: [id])
+  assignedTo    User?     @relation("AssignedTo", fields: [assignedToId], references: [id])
+  createdBy     User      @relation("CreatedBy", fields: [createdById], references: [id])
+
+  @@map("work_orders")
+}
+
+// Audit Log
+model AuditLog {
+  id          String    @id @default(uuid())
+  userId      String?
+  action      String
+  entity      String
+  entityId    String?
+  ipAddress   String?
+  createdAt   DateTime  @default(now())
+
+  user        User?     @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
