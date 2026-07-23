@@ -89,6 +89,7 @@ footer{color:var(--dim);font-size:10.5px;margin-top:22px;text-align:center;line-
     <a data-v="energy"><span class="i">◈</span> Energy & Water</a>
     <a data-v="space"><span class="i">▦</span> Space & Bookings</a>
     <a data-v="safety"><span class="i">⛨</span> Safety & Compliance</a>
+    <a data-v="transport"><span class="i">🚗</span> Transport & Fleet</a>
     <a data-v="vendors"><span class="i">◇</span> Vendors & B-BBEE</a>
   </nav>
   <div class="foot">Data resident in South Africa<br>POPIA · OHS Act 85/1993<br>DHET / HEMIS aligned</div>
@@ -299,6 +300,70 @@ footer{color:var(--dim);font-size:10.5px;margin-top:22px;text-align:center;line-
   </div>
 </section>
 
+<!-- TRANSPORT -->
+<section data-p="transport" class="hide">
+  <div class="grid">
+    <div class="kpi"><div class="bar" style="background:var(--acc2)"></div><div class="lab">Active Vehicles</div><div class="val">47</div><div class="meta">4 in service</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--gold)"></div><div class="lab">This Month</div><div class="val">12,340</div><div class="meta">km traveled</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc)"></div><div class="lab">Fuel Spend</div><div class="val">R 68k</div><div class="meta"><span class="up">↓ 8%</span> vs last month</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--dim)"></div><div class="lab">Scheduled Services</div><div class="val">7</div><div class="meta">next 30 days</div></div>
+  </div>
+  <div class="row">
+    <div class="panel">
+      <h2>Fleet overview <small>By type</small></h2>
+      <table>
+        <tr><th>Vehicle</th><th>Type</th><th>Status</th><th>Mileage</th><th>Service Due</th></tr>
+        <tr><td>Bus 01 (BXY 123 GP)</td><td>Student shuttle</td><td><span class="pill p-ok">Active</span></td><td>142,580 km</td><td>Jan 2027</td></tr>
+        <tr><td>Bus 02 (CZA 456 GP)</td><td>Student shuttle</td><td><span class="pill p-ok">Active</span></td><td>98,420 km</td><td>Mar 2027</td></tr>
+        <tr><td>Van 03 (DAB 789 GP)</td><td>Maintenance crew</td><td><span class="pill p-ok">Active</span></td><td>76,210 km</td><td>Feb 2027</td></tr>
+        <tr><td>Bakkie 04 (EBC 012 GP)</td><td>Campus security</td><td><span class="pill p-high">Service</span></td><td>189,450 km</td><td>Overdue</td></tr>
+        <tr><td>Sedan 05 (FCD 345 GP)</td><td>Management</td><td><span class="pill p-ok">Active</span></td><td>54,120 km</td><td>May 2027</td></tr>
+      </table>
+      <div class="note">Fleet tracking includes fuel cards, service schedules, and license renewals. Overdue services trigger automatic notifications to transport coordinators.</div>
+    </div>
+    <div class="panel">
+      <h2>Monthly fuel usage</h2>
+      <div class="bars">
+        <div class="c"><div class="cb" style="height:65%;background:var(--acc2)"></div><div class="cl">Jul</div></div>
+        <div class="c"><div class="cb" style="height:72%;background:var(--acc2)"></div><div class="cl">Aug</div></div>
+        <div class="c"><div class="cb" style="height:68%;background:var(--acc2)"></div><div class="cl">Sep</div></div>
+        <div class="c"><div class="cb" style="height:81%;background:var(--gold)"></div><div class="cl">Oct</div></div>
+        <div class="c"><div class="cb" style="height:74%;background:var(--acc2)"></div><div class="cl">Nov</div></div>
+        <div class="c"><div class="cb" style="height:58%;background:var(--acc2)"></div><div class="cl">Dec</div></div>
+      </div>
+      <div class="note">Fuel consumption tracked via fleet cards. December shows lower usage due to campus closure during holidays.</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="panel">
+      <h2>Shuttle schedules <small>Campus routes</small></h2>
+      <div class="step">
+        <div class="stepn">1</div>
+        <div class="stept"><b>Main Campus ↔ Residence Village</b>Every 20 min · 06:30–22:00 weekdays</div>
+      </div>
+      <div class="step">
+        <div class="stepn">2</div>
+        <div class="stept"><b>Main Campus ↔ Medical School</b>Every 30 min · 07:00–18:00 weekdays</div>
+      </div>
+      <div class="step">
+        <div class="stepn">3</div>
+        <div class="stept"><b>Weekend Sports Shuttle</b>Every hour · 09:00–17:00 Saturdays only</div>
+      </div>
+      <div class="note">Student shuttle tracking shows real-time location and ETA via the student app. Routes automatically adjust during exam periods and campus events.</div>
+    </div>
+    <div class="panel">
+      <h2>Transport requests</h2>
+      <table>
+        <tr><th>Department</th><th>Purpose</th><th>Date</th><th>Status</th></tr>
+        <tr><td>Sports</td><td>Varsity Cup away match</td><td>28 Jan</td><td><span class="pill p-ok">Approved</span></td></tr>
+        <tr><td>Marketing</td><td>Campus tour (VIP)</td><td>30 Jan</td><td><span class="pill p-ok">Approved</span></td></tr>
+        <tr><td>Estates</td><td>Equipment collection</td><td>2 Feb</td><td><span class="pill p-high">Pending</span></td></tr>
+        <tr><td>Academic</td><td>Field trip - Science</td><td>5 Feb</td><td><span class="pill p-high">Pending</span></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
 <!-- VENDORS -->
 <section data-p="vendors" class="hide">
   <div class="row">
@@ -346,6 +411,7 @@ const T={dash:['Estate Dashboard','Live overview · three campuses'],
  energy:['Energy & Water','Load-shedding readiness, generation and bulk water'],
  space:['Space & Bookings','Utilisation, booking and HEMIS returns'],
  safety:['Safety & Compliance','OHS Act registers, incidents and POPIA'],
+ transport:['Transport & Fleet','Vehicle tracking, shuttles and fuel management'],
  vendors:['Vendors & B-BBEE','CSD-verified suppliers and preferential procurement']};
 const nav=document.getElementById('nav');
 nav.addEventListener('click',e=>{
