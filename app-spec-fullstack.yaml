@@ -1,0 +1,90 @@
+name: zaniq-iwms
+region: nyc
+
+# Frontend Static Site
+static_sites:
+- name: frontend
+  github:
+    branch: main
+    repo: phalipitse/iwmsrepo
+    deploy_on_push: true
+
+  output_dir: /frontend
+
+  routes:
+  - path: /
+
+  catchall_document: index-original.html
+
+  envs:
+  - key: API_URL
+    value: ${api.PUBLIC_URL}
+
+# Backend API Service
+services:
+- name: api
+  github:
+    branch: main
+    repo: phalipitse/iwmsrepo
+    deploy_on_push: true
+
+  build_command: npm install && cd backend && npm run build && npx prisma generate
+  run_command: cd backend && npm start
+
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "8080"
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: ${db.DATABASE_URL}
+  - key: JWT_SECRET
+    scope: RUN_TIME
+    type: SECRET
+    value: zaniq-super-secret-jwt-key-change-this-in-production-2024
+  - key: SESSION_SECRET
+    scope: RUN_TIME
+    type: SECRET
+    value: zaniq-session-secret-key-change-this-2024
+  - key: CORS_ORIGINS
+    value: ${frontend.PUBLIC_URL}
+
+  http_port: 8080
+
+  health_check:
+    http_path: /health
+    initial_delay_seconds: 45
+    period_seconds: 10
+    timeout_seconds: 5
+    failure_threshold: 3
+    success_threshold: 1
+
+  instance_count: 1
+  instance_size_slug: basic-xxs
+
+  routes:
+  - path: /api
+  - path: /health
+
+# PostgreSQL Database
+databases:
+- name: db
+  engine: PG
+  version: "15"
+  production: false
+  num_nodes: 1
+  size: db-s-dev-db
+
+# Global Environment
+envs:
+- key: APP_NAME
+  value: zaniq-iwms
+- key: TZ
+  value: Africa/Johannesburg
+
+# Alerts
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DEPLOYMENT_LIVE
