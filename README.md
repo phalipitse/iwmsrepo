@@ -214,3 +214,70 @@ Built for South African higher education institutions
 **Version**: 2.0.0  
 **Last Updated**: 2026-07-22  
 **Status**: Production Ready ✅
+
+---
+
+## 🐍 Python Utilities (NEW!)
+
+ZaniQ IWMS now includes Python utilities for advanced data processing and analytics!
+
+### Setup Python Environment
+
+```bash
+# Navigate to python utilities
+cd python-utils
+
+# Create virtual environment
+python -m venv venv
+
+# Activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r ../requirements.txt
+```
+
+### Available Python Tools
+
+1. **db_connection.py** - PostgreSQL connection utilities
+2. **export_reports.py** - Excel/PDF report generation
+3. **analytics.py** - Data analytics and statistics
+
+### Usage Example
+
+```python
+from db_connection import DatabaseConnection
+
+# Connect to database
+db = DatabaseConnection()
+db.test_connection()
+
+# Fetch work orders
+work_orders = db.get_work_orders(limit=100)
+print(f"Found {len(work_orders)} work orders")
+```
+
+---
+
+## 🌐 Live Deployment
+
+**Production URL**: https://zaniq-iwms-rdcap.ondigitalocean.app
+
+**Status**: ✅ ACTIVE
+
+**Stack**:
+- Frontend: Static HTML/CSS/JS (FREE)
+- Backend: Node.js + TypeScript ($5/mo)
+- Database: PostgreSQL 15 ($7/mo)
+- Python: Utilities (runs locally or as serverless functions)
+
+**Total Cost**: ~$12/month (covered by $200 DigitalOcean credit)
+
+---
+
+## 📦 Repository
+
+**GitHub**: https://github.com/phalipitse/iwmsrepo  
+**Branch**: main  
+**Last Updated**: 2026-07-23
+
