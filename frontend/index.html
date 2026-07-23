@@ -1,165 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ZaniQ IWMS - Integrated Workplace Management System for South African Higher Education Institutions">
-  <meta name="keywords" content="IWMS, facility management, university management, POPIA, HEMIS, South Africa">
-  <meta name="author" content="ZaniQ">
-
-  <!-- SEO -->
-  <meta property="og:title" content="ZaniQ IWMS - Workplace Management for Universities">
-  <meta property="og:description" content="Integrated facility management for SA higher education">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://zaniq-iwms.netlify.app">
-
-  <title>ZaniQ IWMS — Integrated Workplace Management System</title>
-
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏫</text></svg>">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css">
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#10242E">
-  <link rel="apple-touch-icon" href="images/icon-192.png">
-
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-
-  <!-- Analytics (Google Analytics - Optional) -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR-GA-ID"></script> -->
-
-  <style>
-    /* Critical CSS - Inline for faster load */
-    :root{
-      --ink:#10242E;--paper:#F4F1E9;--card:#FCFAF5;--line:#DCD4C3;
-      --acc:#C4472A;--acc2:#1E7263;--gold:#C08F2E;--dim:#5E6C71;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--paper);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-
-    /* Loading spinner */
-    .loading{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999}
-    .loading.active{display:block}
-    .spinner{width:50px;height:50px;border:4px solid var(--line);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZaniQ IWMS — Interactive Demo</title>
+<style>
+:root{
+  --ink:#10242E;--paper:#F4F1E9;--card:#FCFAF5;--line:#DCD4C3;
+  --acc:#C4472A;--acc2:#1E7263;--gold:#C08F2E;--dim:#5E6C71;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.demo-flag{background:var(--ink);color:#F4F1E9;text-align:center;padding:8px 14px;font-size:11.5px;letter-spacing:.6px;line-height:1.6}
+.demo-flag b{color:var(--gold)}
+.demo-flag a{color:#fff;text-decoration:underline}
+.wrap{display:grid;grid-template-columns:238px 1fr;min-height:100vh}
+aside{background:var(--ink);color:var(--paper);padding:24px 18px}
+.logo{font-weight:800;font-size:25px;letter-spacing:-1px}.logo span{color:var(--acc)}
+.tag{font-size:10.5px;color:#8fa1a7;margin:2px 0 8px;letter-spacing:2px;text-transform:uppercase}
+.client{background:#173442;border-radius:9px;padding:10px 12px;margin-bottom:22px;font-size:11.5px;color:#a9bcc2;line-height:1.5}
+.client b{color:#fff;display:block;font-size:12.5px;margin-bottom:2px}
+nav a{display:flex;gap:11px;align-items:center;padding:10px 12px;border-radius:9px;color:#c2cdd1;
+ text-decoration:none;font-size:13.5px;margin-bottom:3px;cursor:pointer;transition:.15s}
+nav a:hover{background:#173442;color:#fff}
+nav a.on{background:var(--acc);color:#fff;font-weight:600}
+nav a .i{width:17px;text-align:center}
+.foot{margin-top:22px;padding-top:16px;border-top:1px solid #1c3f4d;font-size:11px;color:#8fa1a7;line-height:1.6}
+main{padding:24px 32px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+h1{font-size:25px;letter-spacing:-.5px}.sub{color:var(--dim);font-size:13px;margin-top:3px}
+.stage{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;padding:8px 15px;border-radius:30px;font-size:12.5px;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(192,143,46,.25)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:17px;position:relative;overflow:hidden}
+.kpi .bar{position:absolute;left:0;top:0;bottom:0;width:5px}
+.lab{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+.val{font-size:30px;font-weight:800;margin:6px 0 2px;letter-spacing:-1px}
+.meta{font-size:11.5px;color:var(--dim)}
+.up{color:var(--acc2);font-weight:600}.down{color:var(--acc);font-weight:600}
+.row{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin-bottom:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:19px}
+.panel h2{font-size:14.5px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel h2 small{font-size:10.5px;color:var(--dim);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;padding:8px 6px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px solid #EFE9DA}tr:last-child td{border-bottom:none}
+.pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.p-crit{background:#f7ddd6;color:var(--acc)}.p-high{background:#f5eacd;color:#8d6a12}
+.p-ok{background:#d5e9e5;color:var(--acc2)}.p-nu{background:#e3e7e9;color:var(--dim)}
+.util{display:flex;flex-direction:column;gap:12px}
+.u{display:flex;align-items:center;gap:11px;font-size:12.5px}
+.u .name{width:118px}.track{flex:1;height:9px;background:#E8E1D0;border-radius:6px;overflow:hidden}
+.fill{height:100%;border-radius:6px}.pct{width:36px;text-align:right;font-weight:700;font-size:11.5px}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.b{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:13px}
+.b .n{font-size:22px;font-weight:800}.b .l{font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+.note{background:#EFEADC;border-left:3px solid var(--gold);padding:10px 13px;border-radius:0 8px 8px 0;font-size:12px;color:#4a5559;margin-top:14px;line-height:1.55}
+.hide{display:none}
+.qr{display:flex;gap:16px;align-items:center;background:var(--paper);border:1px dashed var(--line);border-radius:11px;padding:15px;margin-bottom:14px}
+.qrbox{width:66px;height:66px;background:var(--ink);border-radius:9px;display:grid;place-items:center;color:#fff;font-size:26px;flex-shrink:0}
+.step{display:flex;gap:12px;margin-bottom:14px}
+.stepn{width:26px;height:26px;border-radius:50%;background:var(--acc2);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0}
+.stept{font-size:12.5px;line-height:1.55}.stept b{display:block;margin-bottom:2px}
+.bars{display:flex;align-items:flex-end;gap:7px;height:130px;margin-top:8px}
+.bars .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
+.bars .cb{width:100%;border-radius:5px 5px 0 0}
+.bars .cl{font-size:10px;color:var(--dim)}
+.cta{background:var(--ink);color:#fff;border-radius:13px;padding:22px;margin-top:18px;text-align:center}
+.cta h3{font-size:17px;margin-bottom:6px}
+.cta p{font-size:12.5px;color:#a9bcc2;margin-bottom:14px;line-height:1.6}
+.btn{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;padding:11px 22px;border-radius:9px;font-size:13px;font-weight:600}
+footer{color:var(--dim);font-size:10.5px;margin-top:22px;text-align:center;line-height:1.7}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}
+ .row{grid-template-columns:1fr}main{padding:18px}}
+</style>
 </head>
 <body>
-  <!-- Loading Indicator -->
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
+<div class="demo-flag">ZaniQ IWMS — <b>INTERACTIVE DEMO</b> · A fictional institution with illustrative data. Click through the modules on the left. · <a href="#contact">Book a demo</a></div>
+<div class="wrap">
+<aside>
+  <div class="logo">Zani<span>Q</span></div>
+  <div class="tag">IWMS</div>
+  <div class="client"><b>Example University</b>Demonstration tenant<br>Three campuses · sample estate</div>
+  <nav id="nav">
+    <a class="on" data-v="dash"><span class="i">◧</span> Estate Dashboard</a>
+    <a data-v="maint"><span class="i">⚙</span> Maintenance</a>
+    <a data-v="res"><span class="i">⌂</span> Residences</a>
+    <a data-v="energy"><span class="i">◈</span> Energy & Water</a>
+    <a data-v="space"><span class="i">▦</span> Space & Bookings</a>
+    <a data-v="safety"><span class="i">⛨</span> Safety & Compliance</a>
+    <a data-v="vendors"><span class="i">◇</span> Vendors & B-BBEE</a>
+  </nav>
+  <div class="foot">Data resident in South Africa<br>POPIA · OHS Act 85/1993<br>DHET / HEMIS aligned</div>
+</aside>
+
+<main>
+<div class="top">
+  <div><h1 id="ttl">Estate Dashboard</h1><div class="sub" id="sub">Live overview · three campuses</div></div>
+  <div class="stage"><span class="dot"></span> Load-shedding Stage 2 · next 18:00–20:30</div>
+</div>
+
+<!-- DASHBOARD -->
+<section data-p="dash">
+  <div class="grid">
+    <div class="kpi"><div class="bar" style="background:var(--acc)"></div><div class="lab">Open work orders</div><div class="val">86</div><div class="meta"><span class="down">▲ 9</span> vs last week · 5 critical</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc2)"></div><div class="lab">Space utilisation</div><div class="val">71%</div><div class="meta"><span class="up">▲ 3%</span> · HEMIS return ready</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--gold)"></div><div class="lab">Residence occupancy</div><div class="val">96%</div><div class="meta">Campus res · NSFAS reconciled</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--ink)"></div><div class="lab">Standby generation</div><div class="val">64%</div><div class="meta">≈31 hrs runtime at Stage 2</div></div>
   </div>
-
-  <!-- Demo Banner -->
-  <div class="demo-flag">
-    ZaniQ IWMS — <b>INTERACTIVE DEMO</b> · A fictional institution with illustrative data. Click through the modules on the left. · <a href="#contact">Book a demo</a>
+  <div class="row">
+    <div class="panel">
+      <h2>Priority work orders <small>auto-triaged by criticality</small></h2>
+      <table>
+        <tr><th>Asset</th><th>Location</th><th>Issue</th><th>Priority</th><th>SLA</th></tr>
+        <tr><td>Water pump WP-03</td><td>South Campus · bulk store</td><td>Potable feed pressure drop</td><td><span class="pill p-crit">Critical</span></td><td>1h 05m</td></tr>
+        <tr><td>Chiller CH-02</td><td>Central Campus</td><td>Lab cold-storage temp rising</td><td><span class="pill p-crit">Critical</span></td><td>2h 20m</td></tr>
+        <tr><td>Generator GEN-01</td><td>South Campus · plant</td><td>Low fuel before shedding window</td><td><span class="pill p-high">High</span></td><td>4h 30m</td></tr>
+        <tr><td>Lift LFT-04</td><td>Library, Central</td><td>Door sensor intermittent</td><td><span class="pill p-high">High</span></td><td>Today</td></tr>
+        <tr><td>Geyser bank GB-11</td><td>Residence · West wing</td><td>No hot water, 2nd floor</td><td><span class="pill p-high">High</span></td><td>Today</td></tr>
+        <tr><td>AHU-07</td><td>North Campus · admin</td><td>Filter service due</td><td><span class="pill p-ok">Planned</span></td><td>Fri</td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>Utilisation by space type</h2>
+      <div class="util">
+        <div class="u"><span class="name">Lecture venues</span><div class="track"><div class="fill" style="width:84%;background:var(--acc2)"></div></div><span class="pct">84%</span></div>
+        <div class="u"><span class="name">Laboratories</span><div class="track"><div class="fill" style="width:73%;background:var(--acc2)"></div></div><span class="pct">73%</span></div>
+        <div class="u"><span class="name">Library</span><div class="track"><div class="fill" style="width:66%;background:var(--gold)"></div></div><span class="pct">66%</span></div>
+        <div class="u"><span class="name">Seminar rooms</span><div class="track"><div class="fill" style="width:47%;background:var(--gold)"></div></div><span class="pct">47%</span></div>
+        <div class="u"><span class="name">Offices</span><div class="track"><div class="fill" style="width:41%;background:var(--acc)"></div></div><span class="pct">41%</span></div>
+      </div>
+      <h2 style="margin-top:20px">Residence snapshot</h2>
+      <div class="mini">
+        <div class="b"><div class="n">96%</div><div class="l">Occupied</div></div>
+        <div class="b"><div class="n">19</div><div class="l">Open req.</div></div>
+        <div class="b"><div class="n">R1.4m</div><div class="l">NSFAS due</div></div>
+      </div>
+    </div>
   </div>
+  <div class="note"><b>One estate spine.</b> Campus → building → floor → space → asset. Every module reads and writes against the same tree, which is what makes it integrated rather than four systems sharing a login.</div>
+</section>
 
-  <div class="wrap">
-    <!-- Sidebar Navigation -->
-    <aside>
-      <div class="logo">Zani<span>Q</span></div>
-      <div class="tag">IWMS</div>
-
-      <div class="client">
-        <b id="client-name">Example University</b>
-        <span id="client-desc">Demonstration tenant<br>Three campuses · sample estate</span>
+<!-- MAINTENANCE -->
+<section data-p="maint" class="hide">
+  <div class="row">
+    <div class="panel">
+      <h2>Fault logging — QR workflow <small>any staff member or student</small></h2>
+      <div class="qr"><div class="qrbox">▣</div>
+        <div style="font-size:12.5px;line-height:1.6"><b>Every asset carries a QR label.</b><br>
+        Scan with any phone camera — no app install, no login required to report. The scan resolves the asset, its location and its service history automatically.</div></div>
+      <div class="step"><div class="stepn">1</div><div class="stept"><b>Scan & report</b>Reporter adds a photo and short description. Location and asset are already known from the code.</div></div>
+      <div class="step"><div class="stepn">2</div><div class="stept"><b>Automatic triage</b>Text and asset criticality set priority and trade. Water, generation and cold-storage keywords escalate to Critical immediately.</div></div>
+      <div class="step"><div class="stepn">3</div><div class="stept"><b>Dispatch</b>Routed to an in-house technician or an accredited contractor, with the SLA clock started.</div></div>
+      <div class="step"><div class="stepn">4</div><div class="stept"><b>Complete offline</b>Technicians work jobs in the mobile app with no signal — plant rooms, basements, remote sites. Sync happens on reconnect.</div></div>
+      <div class="step"><div class="stepn">5</div><div class="stept"><b>Close & cost</b>Labour, parts and contractor cost captured in ZAR, posted to asset history and the finance export.</div></div>
+    </div>
+    <div class="panel">
+      <h2>Work order backlog</h2>
+      <div class="bars">
+        <div class="c"><div class="cb" style="height:34%;background:var(--acc2)"></div><div class="cl">Mon</div></div>
+        <div class="c"><div class="cb" style="height:52%;background:var(--acc2)"></div><div class="cl">Tue</div></div>
+        <div class="c"><div class="cb" style="height:44%;background:var(--acc2)"></div><div class="cl">Wed</div></div>
+        <div class="c"><div class="cb" style="height:71%;background:var(--gold)"></div><div class="cl">Thu</div></div>
+        <div class="c"><div class="cb" style="height:88%;background:var(--acc)"></div><div class="cl">Fri</div></div>
+        <div class="c"><div class="cb" style="height:39%;background:var(--acc2)"></div><div class="cl">Sat</div></div>
+        <div class="c"><div class="cb" style="height:26%;background:var(--acc2)"></div><div class="cl">Sun</div></div>
       </div>
-
-      <nav id="nav" role="navigation" aria-label="Main navigation">
-        <a class="on" data-v="dash" role="button" tabindex="0" aria-label="Estate Dashboard">
-          <span class="i" aria-hidden="true">◧</span> Estate Dashboard
-        </a>
-        <a data-v="maint" role="button" tabindex="0" aria-label="Maintenance">
-          <span class="i" aria-hidden="true">⚙</span> Maintenance
-        </a>
-        <a data-v="res" role="button" tabindex="0" aria-label="Residences">
-          <span class="i" aria-hidden="true">⌂</span> Residences
-        </a>
-        <a data-v="energy" role="button" tabindex="0" aria-label="Energy & Water">
-          <span class="i" aria-hidden="true">◈</span> Energy & Water
-        </a>
-        <a data-v="space" role="button" tabindex="0" aria-label="Space & Bookings">
-          <span class="i" aria-hidden="true">▦</span> Space & Bookings
-        </a>
-        <a data-v="safety" role="button" tabindex="0" aria-label="Safety & Compliance">
-          <span class="i" aria-hidden="true">⛨</span> Safety & Compliance
-        </a>
-        <a data-v="vendors" role="button" tabindex="0" aria-label="Vendors & B-BBEE">
-          <span class="i" aria-hidden="true">◇</span> Vendors & B-BBEE
-        </a>
-      </nav>
-
-      <div class="foot">
-        Data resident in South Africa<br>
-        POPIA · OHS Act 85/1993<br>
-        DHET / HEMIS aligned
+      <h2 style="margin-top:18px">This month</h2>
+      <div class="mini">
+        <div class="b"><div class="n">92%</div><div class="l">SLA met</div></div>
+        <div class="b"><div class="n">3.4d</div><div class="l">Avg close</div></div>
+        <div class="b"><div class="n">61%</div><div class="l">Planned</div></div>
       </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main role="main">
-      <!-- Page Header -->
-      <div class="top">
-        <div>
-          <h1 id="ttl">Estate Dashboard</h1>
-          <div class="sub" id="sub">Live overview · three campuses</div>
-        </div>
-        <div class="stage">
-          <span class="dot" aria-hidden="true"></span>
-          <span id="load-shedding">Load-shedding Stage 2 · next 18:00–20:30</span>
-        </div>
-      </div>
-
-      <!-- Dynamic Content Container -->
-      <div id="app-content">
-        <!-- Content loaded from app.js -->
-      </div>
-
-      <!-- CTA Section -->
-      <div class="cta" id="contact">
-        <h3>See it with your own estate</h3>
-        <p>This demo uses a fictional institution. We run walkthroughs against your actual campus structure,<br>systems and reporting obligations — no commitment required.</p>
-        <a class="btn" href="mailto:pitsephali@gmail.com?subject=ZaniQ%20IWMS%20demo">Book a demo</a>
-      </div>
-
-      <!-- Footer -->
-      <footer>
-        ZaniQ IWMS · Interactive demonstration · Fictional institution, illustrative data<br>
-        Data resident in South Africa · POPIA · OHS Act 85 of 1993 · DHET/HEMIS aligned
-        <br><br>
-        <small>Version 2.0 | <a href="https://github.com/your-org/zaniq-iwms-v2" style="color:var(--acc)">GitHub</a></small>
-      </footer>
-    </main>
+      <div class="note">Planned versus reactive is where the budget moves. Reactive work costs multiples of planned work — every point shifted is money recovered, so it's tracked as a headline number.</div>
+    </div>
   </div>
+</section>
 
-  <!-- Scripts -->
-  <script src="js/config.js"></script>
-  <script src="js/data.js"></script>
-  <script src="js/components.js"></script>
-  <script src="js/app.js"></script>
+<!-- RESIDENCES -->
+<section data-p="res" class="hide">
+  <div class="grid">
+    <div class="kpi"><div class="bar" style="background:var(--gold)"></div><div class="lab">Beds occupied</div><div class="val">96%</div><div class="meta">Campus residences</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc2)"></div><div class="lab">Accredited off-campus</div><div class="val">14</div><div class="meta">Providers · NSFAS eligible</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc)"></div><div class="lab">Open student requests</div><div class="val">19</div><div class="meta">Logged via student mobile</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--ink)"></div><div class="lab">NSFAS reconciled</div><div class="val">R1.4m</div><div class="meta">Current billing period</div></div>
+  </div>
+  <div class="row">
+    <div class="panel">
+      <h2>Residence register <small>campus &amp; accredited off-campus</small></h2>
+      <table>
+        <tr><th>Residence</th><th>Campus</th><th>Beds</th><th>Occupied</th><th>Accreditation</th></tr>
+        <tr><td>Residence A</td><td>Central</td><td>412</td><td><span class="pill p-ok">98%</span></td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Residence B</td><td>South</td><td>386</td><td><span class="pill p-ok">97%</span></td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Residence C</td><td>South</td><td>298</td><td><span class="pill p-ok">95%</span></td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Residence D</td><td>North</td><td>204</td><td><span class="pill p-high">89%</span></td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Accredited provider 07</td><td>Off-campus</td><td>120</td><td><span class="pill p-ok">100%</span></td><td><span class="pill p-high">Renews 90d</span></td></tr>
+        <tr><td>Accredited provider 11</td><td>Off-campus</td><td>84</td><td><span class="pill p-ok">94%</span></td><td><span class="pill p-nu">Under review</span></td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>Student housing lifecycle</h2>
+      <div class="step"><div class="stepn">1</div><div class="stept"><b>Application</b>Student applies online; identity and registration status verified against the student system.</div></div>
+      <div class="step"><div class="stepn">2</div><div class="stept"><b>Allocation</b>Rules-based bed allocation using funding status, priority categories and accessibility needs.</div></div>
+      <div class="step"><div class="stepn">3</div><div class="stept"><b>Check-in</b>Digital condition report with photos, signed on device — the baseline for later damage claims.</div></div>
+      <div class="step"><div class="stepn">4</div><div class="stept"><b>In residence</b>Students log maintenance from their phones; wardens run scheduled room and fire-equipment inspections.</div></div>
+      <div class="step"><div class="stepn">5</div><div class="stept"><b>Check-out &amp; reconcile</b>Exit inspection against baseline, damages costed, occupancy periods reconciled to NSFAS claims.</div></div>
+    </div>
+  </div>
+</section>
 
-  <!-- Service Worker for PWA -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('SW registered:', reg))
-          .catch(err => console.log('SW registration failed:', err));
-      });
-    }
-  </script>
+<!-- ENERGY -->
+<section data-p="energy" class="hide">
+  <div class="grid">
+    <div class="kpi"><div class="bar" style="background:var(--gold)"></div><div class="lab">Eskom stage</div><div class="val">2</div><div class="meta">Next window 18:00–20:30</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--ink)"></div><div class="lab">Generator fuel</div><div class="val">64%</div><div class="meta">≈31 hrs runtime at Stage 2</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc2)"></div><div class="lab">Bulk water stored</div><div class="val">78%</div><div class="meta">Campus reservoir</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc)"></div><div class="lab">Anomalies flagged</div><div class="val">3</div><div class="meta">Possible leak · Central</div></div>
+  </div>
+  <div class="row">
+    <div class="panel">
+      <h2>Load-shedding readiness <small>stage-aware operations</small></h2>
+      <table>
+        <tr><th>Campus</th><th>Standby</th><th>Fuel</th><th>Runtime @ S2</th><th>Status</th></tr>
+        <tr><td>South Campus</td><td>GEN-01 · plant building</td><td>64%</td><td>≈31 hrs</td><td><span class="pill p-ok">Ready</span></td></tr>
+        <tr><td>Central Campus</td><td>GEN-02</td><td>41%</td><td>≈17 hrs</td><td><span class="pill p-high">Refuel</span></td></tr>
+        <tr><td>North Campus</td><td>GEN-03</td><td>72%</td><td>≈29 hrs</td><td><span class="pill p-ok">Ready</span></td></tr>
+        <tr><td>Library UPS</td><td>UPS bank</td><td>—</td><td>≈45 min</td><td><span class="pill p-ok">Ready</span></td></tr>
+      </table>
+      <div class="note"><b>Stage-aware scheduling.</b> When a shedding window is published, ZaniQ re-times non-critical planned work out of it, pre-checks generator fuel and oil, and warns on any residence or lab that would lose water pressure or cold-chain while the power is off.</div>
+    </div>
+    <div class="panel">
+      <h2>Water — metered by stream</h2>
+      <div class="util">
+        <div class="u"><span class="name">Potable store</span><div class="track"><div class="fill" style="width:78%;background:var(--acc2)"></div></div><span class="pct">78%</span></div>
+        <div class="u"><span class="name">Fire reserve</span><div class="track"><div class="fill" style="width:94%;background:var(--acc2)"></div></div><span class="pct">94%</span></div>
+        <div class="u"><span class="name">Grey-water</span><div class="track"><div class="fill" style="width:52%;background:var(--gold)"></div></div><span class="pct">52%</span></div>
+        <div class="u"><span class="name">Municipal feed</span><div class="track"><div class="fill" style="width:66%;background:var(--gold)"></div></div><span class="pct">66%</span></div>
+      </div>
+      <div class="note">Potable, fire, grey-water and municipal supply are metered separately. Abnormal draw on any one stream is usually the earliest signal of an underground leak — weeks before it surfaces.</div>
+    </div>
+  </div>
+</section>
 
-  <!-- Analytics -->
-  <script>
-    // Simple page view tracking
-    if (window.location.hostname !== 'localhost') {
-      console.log('Page view:', window.location.pathname);
-    }
-  </script>
+<!-- SPACE -->
+<section data-p="space" class="hide">
+  <div class="row">
+    <div class="panel">
+      <h2>Space utilisation <small>HEMIS-aligned</small></h2>
+      <table>
+        <tr><th>Building</th><th>Campus</th><th>Function</th><th>Utilisation</th><th>Status</th></tr>
+        <tr><td>Academic block</td><td>Central</td><td>Lecture &amp; seminar</td><td>84%</td><td><span class="pill p-ok">Optimal</span></td></tr>
+        <tr><td>Library</td><td>Central</td><td>Study &amp; collections</td><td>66%</td><td><span class="pill p-ok">Good</span></td></tr>
+        <tr><td>Science labs</td><td>Central</td><td>Teaching labs</td><td>73%</td><td><span class="pill p-ok">Good</span></td></tr>
+        <tr><td>Administration</td><td>North</td><td>Offices</td><td>41%</td><td><span class="pill p-high">Underused</span></td></tr>
+        <tr><td>Sports &amp; welfare</td><td>South</td><td>Recreation</td><td>58%</td><td><span class="pill p-ok">Good</span></td></tr>
+      </table>
+      <div class="note"><b>Statutory value.</b> Space utilisation is a DHET reporting obligation. ZaniQ derives it continuously from booking and timetable data rather than an annual manual survey — the HEMIS return becomes a report you run, not a project you staff.</div>
+    </div>
+    <div class="panel">
+      <h2>Booking &amp; timetable</h2>
+      <div class="step"><div class="stepn">1</div><div class="stept"><b>Timetable sync</b>Scheduled teaching is imported, so booking never double-allocates a venue.</div></div>
+      <div class="step"><div class="stepn">2</div><div class="stept"><b>Ad-hoc booking</b>Staff book seminar rooms and venues, with approval rules per space type.</div></div>
+      <div class="step"><div class="stepn">3</div><div class="stept"><b>Actual vs booked</b>Attendance or access data shows which bookings were really used. The gap is recoverable capacity you already own.</div></div>
+      <div class="step"><div class="stepn">4</div><div class="stept"><b>Return generation</b>Utilisation computed per space type and exported in HEMIS format.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section data-p="safety" class="hide">
+  <div class="grid">
+    <div class="kpi"><div class="bar" style="background:var(--acc)"></div><div class="lab">Open incidents</div><div class="val">4</div><div class="meta">1 under investigation</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--acc2)"></div><div class="lab">Fire equipment</div><div class="val">97%</div><div class="meta">In-date service</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--gold)"></div><div class="lab">Inspections due</div><div class="val">12</div><div class="meta">Next 30 days</div></div>
+    <div class="kpi"><div class="bar" style="background:var(--ink)"></div><div class="lab">POPIA register</div><div class="val">✓</div><div class="meta">Current &amp; auditable</div></div>
+  </div>
+  <div class="row">
+    <div class="panel">
+      <h2>Compliance registers</h2>
+      <table>
+        <tr><th>Register</th><th>Basis</th><th>Frequency</th><th>Status</th></tr>
+        <tr><td>OHS incidents</td><td>OHS Act 85 of 1993</td><td>Continuous</td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Fire equipment</td><td>SANS / municipal</td><td>Monthly &amp; annual</td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Emergency evacuation</td><td>OHS Act</td><td>Per semester</td><td><span class="pill p-high">Due</span></td></tr>
+        <tr><td>Lift certificates</td><td>Statutory</td><td>Annual</td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>Pressure vessels</td><td>Statutory</td><td>Annual</td><td><span class="pill p-ok">Current</span></td></tr>
+        <tr><td>POPIA processing</td><td>POPIA</td><td>Continuous</td><td><span class="pill p-ok">Current</span></td></tr>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>Data protection posture</h2>
+      <div class="step"><div class="stepn">✓</div><div class="stept"><b>SA data residency</b>All primary and backup data stored in a South African region.</div></div>
+      <div class="step"><div class="stepn">✓</div><div class="stept"><b>Minimisation</b>Student personal information limited to what each module needs; ID numbers encrypted at column level.</div></div>
+      <div class="step"><div class="stepn">✓</div><div class="stept"><b>Access control</b>Role-based, enforced per record — a warden sees only their residence, a student only their own room.</div></div>
+      <div class="step"><div class="stepn">✓</div><div class="stept"><b>Audit trail</b>Append-only log of every change to personal or financial records: who, what, when, before and after.</div></div>
+      <div class="step"><div class="stepn">✓</div><div class="stept"><b>Data-subject rights</b>Built-in export and deletion workflow for access and erasure requests.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VENDORS -->
+<section data-p="vendors" class="hide">
+  <div class="row">
+    <div class="panel">
+      <h2>Vendor register <small>CSD-verified</small></h2>
+      <table>
+        <tr><th>Vendor</th><th>Trade</th><th>B-BBEE</th><th>CSD</th><th>SLA</th></tr>
+        <tr><td>Vendor A</td><td>Electrical</td><td><span class="pill p-ok">Level 1</span></td><td><span class="pill p-ok">Verified</span></td><td>94%</td></tr>
+        <tr><td>Vendor B</td><td>Plumbing &amp; pumps</td><td><span class="pill p-ok">Level 2</span></td><td><span class="pill p-ok">Verified</span></td><td>89%</td></tr>
+        <tr><td>Vendor C</td><td>HVAC</td><td><span class="pill p-high">Level 4</span></td><td><span class="pill p-ok">Verified</span></td><td>91%</td></tr>
+        <tr><td>Vendor D</td><td>Lifts</td><td><span class="pill p-high">Level 4</span></td><td><span class="pill p-ok">Verified</span></td><td>96%</td></tr>
+        <tr><td>Vendor E</td><td>Generators</td><td><span class="pill p-ok">Level 2</span></td><td><span class="pill p-nu">Expiring</span></td><td>87%</td></tr>
+      </table>
+      <div class="note">Tax clearance and CSD status are checked before dispatch. A vendor with lapsed compliance cannot be allocated new work — the control sits in the workflow, not in a spreadsheet someone remembers to check.</div>
+    </div>
+    <div class="panel">
+      <h2>Preferential procurement</h2>
+      <div class="util">
+        <div class="u"><span class="name">Level 1–2</span><div class="track"><div class="fill" style="width:58%;background:var(--acc2)"></div></div><span class="pct">58%</span></div>
+        <div class="u"><span class="name">Level 3–4</span><div class="track"><div class="fill" style="width:31%;background:var(--gold)"></div></div><span class="pct">31%</span></div>
+        <div class="u"><span class="name">Level 5–8</span><div class="track"><div class="fill" style="width:8%;background:var(--acc)"></div></div><span class="pct">8%</span></div>
+        <div class="u"><span class="name">Non-compliant</span><div class="track"><div class="fill" style="width:3%;background:var(--dim)"></div></div><span class="pct">3%</span></div>
+      </div>
+      <div class="note">Maintenance spend is attributed by B-BBEE level automatically, so preferential-procurement reporting is a live figure rather than a year-end reconstruction.</div>
+    </div>
+  </div>
+</section>
+
+<div class="cta" id="contact">
+  <h3>See it with your own estate</h3>
+  <p>This demo uses a fictional institution. We run walkthroughs against your actual campus structure,<br>systems and reporting obligations — no commitment required.</p>
+  <a class="btn" href="mailto:pitsephali@gmail.com?subject=ZaniQ%20IWMS%20demo">Book a demo</a>
+</div>
+
+<footer>
+  ZaniQ IWMS · Interactive demonstration · Fictional institution, illustrative data<br>
+  Data resident in South Africa · POPIA · OHS Act 85 of 1993 · DHET/HEMIS aligned
+</footer>
+</main>
+</div>
+<script>
+const T={dash:['Estate Dashboard','Live overview · three campuses'],
+ maint:['Maintenance','Work orders, assets and contractor dispatch'],
+ res:['Residences','Student housing lifecycle and NSFAS reconciliation'],
+ energy:['Energy & Water','Load-shedding readiness, generation and bulk water'],
+ space:['Space & Bookings','Utilisation, booking and HEMIS returns'],
+ safety:['Safety & Compliance','OHS Act registers, incidents and POPIA'],
+ vendors:['Vendors & B-BBEE','CSD-verified suppliers and preferential procurement']};
+const nav=document.getElementById('nav');
+nav.addEventListener('click',e=>{
+  const a=e.target.closest('a'); if(!a)return;
+  [...nav.children].forEach(x=>x.classList.remove('on')); a.classList.add('on');
+  const v=a.dataset.v;
+  document.querySelectorAll('section[data-p]').forEach(s=>s.classList.toggle('hide',s.dataset.p!==v));
+  document.getElementById('ttl').textContent=T[v][0];
+  document.getElementById('sub').textContent=T[v][1];
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
 </body>
 </html>
