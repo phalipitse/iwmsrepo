@@ -395,7 +395,7 @@ footer{color:var(--dim);font-size:10.5px;margin-top:22px;text-align:center;line-
 <div class="cta" id="contact">
   <h3>See it with your own estate</h3>
   <p>This demo uses a fictional institution. We run walkthroughs against your actual campus structure,<br>systems and reporting obligations — no commitment required.</p>
-  <a class="btn" href="mailto:pitsephali@gmail.com?subject=ZaniQ%20IWMS%20demo" onclick="window.location.href='mailto:pitsephali@gmail.com?subject=ZaniQ%20IWMS%20demo';return false;">Book a demo</a>
+  <a class="btn" href="#" id="bookDemoBtn">Book a demo</a>
 </div>
 
 <footer>
@@ -422,6 +422,14 @@ nav.addEventListener('click',e=>{
   document.getElementById('ttl').textContent=T[v][0];
   document.getElementById('sub').textContent=T[v][1];
   window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// Book a Demo button handler (bypasses Cloudflare email protection)
+document.getElementById('bookDemoBtn').addEventListener('click',function(e){
+  e.preventDefault();
+  const email='pitsephali'+'@'+'gmail.com';
+  const subject='ZaniQ%20IWMS%20demo';
+  window.location.href='mailto:'+email+'?subject='+subject;
 });
 </script>
 </body>
