@@ -1,0 +1,80 @@
+spec:
+  name: zaniq-iwms
+  region: nyc
+
+  # Backend API Service
+  services:
+  - name: api
+    source_dir: backend
+
+    build_command: npm install && npx prisma generate
+    run_command: npm start
+
+    envs:
+    - key: NODE_ENV
+      value: production
+    - key: PORT
+      value: "8080"
+    - key: DATABASE_URL
+      scope: RUN_AND_BUILD_TIME
+      type: SECRET
+      value: ${db.DATABASE_URL}
+    - key: JWT_SECRET
+      scope: RUN_TIME
+      type: SECRET
+      value: zaniq-jwt-secret-change-in-production-12345
+    - key: CORS_ORIGINS
+      value: ${web.PUBLIC_URL}
+
+    http_port: 8080
+
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+
+    instance_count: 1
+    instance_size_slug: basic-xxs
+
+    routes:
+    - path: /api
+
+  # Frontend Static Site
+  static_sites:
+  - name: web
+    source_dir: frontend
+
+    output_dir: /
+
+    routes:
+    - path: /
+
+    catchall_document: index-original.html
+
+    envs:
+    - key: API_URL
+      value: ${api.PUBLIC_URL}
+
+  # PostgreSQL Database
+  databases:
+  - name: db
+    engine: PG
+    version: "15"
+    production: false
+    db_name: zaniq_production
+    db_user: zaniq_user
+    num_nodes: 1
+    size: db-s-1vcpu-1gb
+
+  # Global Environment
+  envs:
+  - key: APP_NAME
+    value: zaniq-iwms
+  - key: TZ
+    value: Africa/Johannesburg
+
+  # Alerts
+  alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DEPLOYMENT_LIVE

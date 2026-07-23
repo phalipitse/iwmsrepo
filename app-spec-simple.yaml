@@ -1,0 +1,25 @@
+name: zaniq-iwms
+region: nyc
+
+# Frontend Static Site Only
+static_sites:
+- name: frontend
+  github:
+    branch: main
+    repo: phalipitse/iwmsrepo
+    deploy_on_push: true
+
+  source_dir: frontend
+  output_dir: /
+
+  routes:
+  - path: /
+
+  catchall_document: index-original.html
+
+# Global Environment
+envs:
+- key: APP_NAME
+  value: zaniq-iwms
+- key: TZ
+  value: Africa/Johannesburg
